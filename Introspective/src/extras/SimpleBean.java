@@ -1,4 +1,4 @@
-package core;
+package extras;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;

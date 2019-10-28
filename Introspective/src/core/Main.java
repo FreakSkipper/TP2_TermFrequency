@@ -19,7 +19,7 @@ public class Main {
 	}
 	
 	
-	public static Vector<String> readDocument() {
+	public static Vector<String> readDocument(String nomeArquivo) {
 		// conferindo chamada de funcao
 		String className = new Exception().getStackTrace()[1].getMethodName();
 		String expectedCaller = "main";
@@ -30,8 +30,7 @@ public class Main {
 		}
 		
 		// abrindo arquivo
-		String nome_arquivo = "SomeText.txt";
-		File file = new File(System.getProperty("user.dir") + "/Introspective/src/" + nome_arquivo);
+		File file = new File(System.getProperty("user.dir") + "/Introspective/src/" + nomeArquivo);
 		String str;
 		Vector<String> string_vector = new Vector<String>();
 		
@@ -43,8 +42,8 @@ public class Main {
 			bufferedreader.close();
 			
 		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("> Nao foi possivel ler o arquivo: " + nome_arquivo);
+			// e.printStackTrace();
+			System.out.println("> Nao foi possivel ler o arquivo: " + nomeArquivo);
 		}
 		
 		return string_vector;
@@ -62,7 +61,7 @@ public class Main {
 			System.out.print(">> ");
 			
 			String readString = user_input.nextLine();
-			opt = Integer.parseInt(readString);
+			if (!readString.isEmpty()) opt = Integer.parseInt(readString);
 		} while(opt != 1 && opt != 2);
 				
 		return opt;
@@ -70,8 +69,6 @@ public class Main {
 	
 	
 	public static void main(String[] args) {
-		Vector<String> text = readDocument();
-		if (text == null) return;
 		
 		boolean stop = false;
 		user_input = new Scanner(System.in);
@@ -79,7 +76,16 @@ public class Main {
 		do {
 			int opt = menu();
 			
-			if (opt == 1) {				
+			if (opt == 1) {
+				// Input nome arquivo
+				System.out.println("> Insira o nome do arquivo a ser persquisado (SomeText.txt):");
+				System.out.println(">> ");
+
+				String nomeArquivo = user_input.nextLine();
+				Vector<String> text = readDocument(nomeArquivo);
+				if (text.isEmpty()) continue;
+				
+				// Input termo a ser procurado
 				System.out.println("> Insira o termo a ser procurado:");
 				System.out.print(">> ");
 				
@@ -105,8 +111,9 @@ public class Main {
 				else {
 					System.out.println("> Erro ao acessar atributos de " +tf.getClass());
 				}
-			}
-		} while(stop);
+			} // end opt == 1;
+			else if (opt == 2) stop = true;
+		} while(!stop);
 		
 		user_input.close();
 	}
