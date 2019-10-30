@@ -29,7 +29,7 @@ public class TermFrequency {
 
 		for (String line : text) {
 			String[] words;
-			words = line.split(" ");
+			words = line.split("\\s");
 
 			for (String single_word : words) {
 				if (single_word.contains(term))
