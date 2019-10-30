@@ -15,120 +15,72 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 public class Main {
-	private static Scanner user_input;			// destinado ao input do usuario (https://stackoverflow.com/q/13042008)
-	
-	
-	public static void CLEAR() {
-		System.out.println(new String(new char[50]).replace("\0", "\r\n"));
-	}
-	
-	
-	public static Vector<String> readDocument(String nomeArquivo) {
-		// conferindo chamada de funcao
-		String className = new Exception().getStackTrace()[1].getMethodName();
-		String expectedCaller = "main";
-		if (className != expectedCaller) {
-			System.out.println("> Chamada invalida de funcao");
-			System.out.println("\tCaller: " +className + "\n\tExpected: " +expectedCaller);
-			return null;
-		}
-		
-		// abrindo arquivo
-		File file = new File(System.getProperty("user.dir") + "/Introspective/src/" + nomeArquivo);
-		String str;
-		Vector<String> string_vector = new Vector<String>();
-		
-		try {
-			BufferedReader bufferedreader = new BufferedReader(new FileReader(file));
-			while ((str = bufferedreader.readLine()) != null) { // enquanto ocorrer uma leitura
-				str = str.replaceAll("[^a-zA-Z]\\s?", " ").toLowerCase();
-				if (str != "") {
-					string_vector.add(str);
-				}
-			}
-			bufferedreader.close();
-			
-		} catch (IOException e) {
-			// e.printStackTrace();
-			System.out.println("> Nao foi possivel ler o arquivo: " + nomeArquivo);
-		}
-		
-		return string_vector;
-	} // end readDocument();
-	
-	
-	public static void rmStopWords(Vector<String> text, Vector<String> stopwords) {
-	String [] array_text = text.toArray(new String[text.size()]); // operacao usando o vetor nao funcionava para casos muito grandes.
-		for (int i = 0; i < array_text.length; i++) {
-			String line = array_text[i];
-			for (int j = 0; j < stopwords.size(); j++) {
-				line = line.replaceAll("\\b" +stopwords.elementAt(j) + "\\b\\s*", "");
-				line = line.replaceAll("\\b" + "[a-zA-Z]?" + "\\b", "");
-				text.set(i, line);
-			}
-		}
-	} // end rmStopWords();
+	private static Scanner user_input; // destinado ao input do usuario (https://stackoverflow.com/q/13042008)
 
-	
 	public static int menu() {
 		int opt = -1;
-		
+
 		do {
 			// CLEAR();
 			System.out.println("############################ Term Frequency ############################");
 			System.out.println("> 1 - Calcular a frequencia de um termo");
 			System.out.println("> 2 - Sair");
 			System.out.print(">> ");
-			
+
 			String readString = user_input.nextLine();
-			if (!readString.isEmpty()) opt = Integer.parseInt(readString);
-		} while(opt != 1 && opt != 2);
-				
+			if (!readString.isEmpty())
+				opt = Integer.parseInt(readString);
+		} while (opt != 1 && opt != 2);
+
 		return opt;
 	} // end menu();
-	
-	
+
 	public static void main(String[] args) {
 		String nomeArquivoFonte, nomeArquivoStopWords;
 		boolean stop = false;
 		user_input = new Scanner(System.in);
-		
+
 		do {
 			int opt = menu();
-			
+
 			if (opt == 1) {
 				// Input nome arquivo
 				System.out.println("> Insira o nome do arquivo a ser persquisado (SomeText.txt):");
 				System.out.println(">> ");
 				nomeArquivoFonte = user_input.nextLine();
-				Vector<String> text = readDocument(nomeArquivoFonte);
-				
+				Vector<String> text = Utilidades.readDocument(nomeArquivoFonte);
+
 				System.out.println("> Insira o nome do arquivo de stopwords (StopWords.txt):");
 				System.out.println(">> ");
 				nomeArquivoStopWords = user_input.nextLine();
-				Vector<String> stopwords = readDocument(nomeArquivoStopWords);
-				if (text.isEmpty() || stopwords.isEmpty()) continue;
-				
+				Vector<String> stopwords = Utilidades.readDocument(nomeArquivoStopWords);
+				if (text.isEmpty() || stopwords.isEmpty())
+					continue;
+
 				// removendo stopwords
-				rmStopWords(text, stopwords);
-				
+				Utilidades.rmStopWords(text, stopwords);
+
 				// calculando frequencia de termos
 				TermFrequency tf = new TermFrequency();
 				tf.termFreq(text);
-				
+				// tf.sortMap(); // ordenando normalmente
+				Utilidades.sortMap(tf); // ordenando usando Introspective
+
 				try {
-					Field f_terms = tf.getClass().getDeclaredField("terms");		// acessando atributo "terms"
-					f_terms.setAccessible(true);									// tornando atributo privado acessivel (perigoso)
-					
+					Field f_terms = tf.getClass().getDeclaredField("terms"); // acessando atributo "terms"
+					f_terms.setAccessible(true); // tornando atributo privado acessivel (perigoso)
+
 					// printando termos e frequencia correspondente
 					@SuppressWarnings("unchecked")
-					Map<String, Integer> ptr_terms = (Map<String, Integer>) f_terms.get(tf);		// ponteiro para objeto da classe "TermFrequency"
+					Map<String, Integer> ptr_terms = (Map<String, Integer>) f_terms.get(tf); // ponteiro para objeto da
+																								// classe
+																								// "TermFrequency"
 					Iterator<String> it = ptr_terms.keySet().iterator();
 					int contador = 0;
 					while (it.hasNext()) {
 						contador++;
 						String key = it.next();
-						System.out.printf("> Palavra: %-20s | Frequencia: %-8s\n", "*"+key+"*", ptr_terms.get(key));
+						System.out.printf("> Palavra: %-20s | Frequencia: %-8s\n", "*" + key + "*", ptr_terms.get(key));
 //						System.out.println(f_terms.get(tf));
 					}
 					System.out.println("> A quantidade de palavras eh: " + contador);
@@ -136,13 +88,14 @@ public class Main {
 					e.printStackTrace();
 					return;
 				}
-				
+
 				// printando normalmente
 				// tf.printTerms();
 			} // end opt == 1;
-			else if (opt == 2) stop = true;
-		} while(!stop);
-		
+			else if (opt == 2)
+				stop = true;
+		} while (!stop);
+
 		user_input.close();
 	} // end main();
 }

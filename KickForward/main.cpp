@@ -25,7 +25,7 @@ auto lambda_file = [](string path_to_file){
     file.close();
 
     return words;
- };
+};
 
 bool compareSort (const pair<string,int> a, const pair<string,int> b){
   return (a.second > b.second );
@@ -62,7 +62,7 @@ void frequencies(vector<string> words, void * func){
         }
 
         bool encontrou = false;
-        for( unsigned j = 0; j < contagem.size(); j++){
+        for(unsigned j = 0; j < contagem.size(); j++){
             if(contagem[j].first == i){
                 encontrou = true;
                 contagem[j].second++;
