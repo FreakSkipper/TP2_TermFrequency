@@ -1,4 +1,4 @@
-# Trabalho 2 - TP2
+# Trabalho 2 - TP2 - TermFrequency
 
 ## Integrantes:
   - Eduardo F. Assis;
