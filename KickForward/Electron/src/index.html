@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="style.css" type="text/css">
     <title>UnB - Kick Forward</title>
     <script src="./kickforward.js"></script>
+    <script src="./utility.js"></script>
   </head>
   <body>
     <div class="titulo">
@@ -30,6 +31,10 @@
     <div class="saida">
       <div id="termFrequency" class="termFrequency"></div>
       <p id="finish" class="finish"> Aguardando... </p>
+    </div>
+    <div class="alerta" id="alerta">
+      <p class="titleAlerta" id="titleAlerta">Error</p>
+      <p class="okay" onclick="okayError()">Okay</p>
     </div>
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>

@@ -10,24 +10,13 @@ function print_text(words, func){
         for ( var i = 0 ; i < words.length; i++){
             var porcento = words[i][1]*100/maior;
             palavras = palavras + 
-            // "<span class=\"word-left\">"+ words[i][0] + "</span><div class=\"progressBar\" style=\"height:14px;width:"+ porcento +"%\"></div> " + "<span class=\"word-right\">" + words[i][1] + "</span><br>";
             "<div class=\"Word\">" +
             "<p>"+ words[i][0].toString() + "</p>" +
             "<div class=\"progressBar\" style=\"width:"+ porcento.toString() + "%; height:10px\"><div class=\"barFill\"></div></div>" +
             "<p class=\"word-right\">"+ words[i][1].toString() + "</p>" +
             "</div>";
         }
-
-        // alert("chegou1");
-        
-        // for(var i = 0 ; i < words_sorted.length; i++){
-        //     palavras = palavras + words_sorted[i][0].toString() + " : " + words_sorted[i][1].toString() + "<br>";
-        // }
-        // alert("chegou2");
-        // alert(palavras.length);
         document.getElementById('termFrequency').innerHTML = document.getElementById('termFrequency').innerHTML + palavras;
-
-
     }
 
     func();
@@ -61,7 +50,6 @@ function frequencies(words, func){
 
     document.getElementById('termFrequency').innerHTML = "";
 
-    // document.getElementById('termFrequency').innerHTML = document.getElementById('termFrequency').innerHTML + palavras;
     func(contagem, print_text);
 }
 
@@ -74,27 +62,34 @@ function remove_stop_words(words, func){
                                 
         var reader = new FileReader();
 
-        reader.readAsText(file);
-        reader.onload = function(e){
-            stopwords = reader.result;
-            var split_quebra = stopwords.split('\n');
-            var words_limpas = [];
-            
-            for(var i = 0; i < words.length; i++){
-                var encontrou = false;
-                for(var j = 0; j < split_quebra.length; j++){
-                    
-                    if(split_quebra[j].toString().trim() == words[i].toString()){
-                        encontrou = true;
+        if(file){
+            reader.readAsText(file);
+            reader.onload = function(e){
+                stopwords = reader.result;
+                var split_quebra = stopwords.split('\n');
+                var words_limpas = [];
+                
+                for(var i = 0; i < words.length; i++){
+                    var encontrou = false;
+                    for(var j = 0; j < split_quebra.length; j++){
+                        
+                        if(split_quebra[j].toString().trim() == words[i].toString()){
+                            encontrou = true;
+                        }
+                    }
+
+                    if(!encontrou){
+                        words_limpas.push(words[i].toString());
                     }
                 }
-
-                if(!encontrou){
-                    words_limpas.push(words[i].toString());
-                }
+                
+                func(words_limpas, sort);
             }
-               
-            func(words_limpas, sort);
+        }
+        else{
+            document.getElementById("alerta").style.display = "block";
+            document.getElementById("titleAlerta").innerHTML = "Favor, escolha um arquivo para Verificar e um para StopWords.";
+            document.getElementById("termFrequency").innerHTML = "";
         }
     }    
 }
@@ -104,8 +99,6 @@ function normalize(words, func){
     for(var i = 0; i < words.length; i++){
         words_lower.push(words[i].toString().toLowerCase().trim());
     }
-    // document.getElementById('termFrequency').innerHTML = document.getElementById('termFrequency').innerHTML + words_lower;   
-
     func(words_lower, frequencies);
 }
 
@@ -126,14 +119,6 @@ function filter_chars(words, func){
         }        
     }
 
-    // document.getElementById('termFrequency').innerHTML = document.getElementById('termFrequency').innerHTML + split_total;   
-    // }
-    
-    // for(var i = 0; i < split_quebra.length; i++){
-    //     var split_space = split_quebra[i].split(' ');
-    //     split_total = split_total.concat(split_space);
-    //     document.getElementById('termFrequency').innerHTML = document.getElementById('termFrequency').innerHTML + ".";
-    // }
     func(split_total, remove_stop_words);
 }
 
@@ -144,14 +129,20 @@ function read_file(func){
         var words;
         var file = arquivo.files[0];
 
-        var reader = new FileReader();
+        if(file){
+            var reader = new FileReader();
 
-        reader.readAsText(file);
-        reader.onload = function(e){
-            
-            words = reader.result;
-            func(words, normalize);
-            document.getElementById('finish').innerHTML = "Finalizado!";
+            reader.readAsText(file);
+            reader.onload = function(e){
+                
+                words = reader.result;
+                func(words, normalize);
+                document.getElementById('finish').innerHTML = "Finalizado!";
+            }
+        }
+        else{
+            document.getElementById("alerta").style.display = "block";
+            document.getElementById("titleAlerta").innerHTML = "Favor, escolha um arquivo para Verificar e um para StopWords.";
         }
     }
 }
@@ -160,8 +151,4 @@ function main(){
     document.getElementById('termFrequency').innerHTML = "";
     read_file(filter_chars);
     // document.getElementById('finish').innerHTML = "Finalizado!";
-}
-
-function alterou(id, objeto){
-    document.getElementById(id).innerHTML = "Selecionado: " + objeto.files[0].name;
 }
