@@ -1,14 +1,14 @@
 package core;
 
-import java.util.Comparator;
+/*import java.util.Comparator;
 import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Map;*/
 import java.util.Vector;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.*;
+//import java.lang.reflect.*;
 
 public class Utilidades {
 	public static void CLEAR() {
@@ -16,7 +16,7 @@ public class Utilidades {
 	}
 
 	public static Vector<String> readDocument(String nomeArquivo) {
-		// conferindo chamada de funcao
+		// conferindo chamada de funcao através da pilha de execução
 		String className = new Exception().getStackTrace()[1].getMethodName();
 		String expectedCaller = "main";
 		if (className != expectedCaller) {
@@ -26,7 +26,7 @@ public class Utilidades {
 		}
 
 		// abrindo arquivo
-		File file = new File(System.getProperty("user.dir") + "/Introspective/src/" + nomeArquivo);
+		File file = new File(System.getProperty("user.dir") + "/" +nomeArquivo);
 		String str;
 		Vector<String> string_vector = new Vector<String>();
 
@@ -42,7 +42,8 @@ public class Utilidades {
 
 		} catch (IOException e) {
 			// e.printStackTrace();
-			System.out.println("> Nao foi possivel ler o arquivo: " + nomeArquivo);
+			System.out.println("> Nao foi possivel ler o arquivo: " + "\"" +nomeArquivo + "\""
+					+ " no caminho: " + "\"" +System.getProperty("user.dir") + "\"");
 		}
 
 		return string_vector;
@@ -61,25 +62,42 @@ public class Utilidades {
 		}
 	} // end rmStopWords();
 
-	// ordenar Map por valor usando Introspection
+	// ordenar "terms" usando Introspection
 	public static void sortMap(Object obj) {
-		Map<String, Integer> sortedMap = new LinkedHashMap<>();
-
-		try {
-			Field obj_terms = obj.getClass().getDeclaredField("terms"); // capturando campo do objeto
-			obj_terms.setAccessible(true); // tornando-o acessivel
-
-			@SuppressWarnings("unchecked") // copia do conteudo de "terms" com cast
-			Map<String, Integer> obj_unsortedMap = (Map<String, Integer>) obj_terms.get(obj);
-
-			// ordenando (decrescente)
-			obj_unsortedMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-					.forEachOrdered(entry -> sortedMap.put(entry.getKey(), entry.getValue()));
-
-			obj_terms.set(obj, sortedMap);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (obj instanceof TermFrequency) {		// conferindo classe do objeto
+			TermFrequency ptr_obj = (TermFrequency) obj;
+			ptr_obj.sortMap();
 		}
-
+		
+		/*
+		Poderia ter um comportamento para cada tipo de objeto, permitindo a alteração
+		do fluxo do programa de acordo com o tipo do objeto (simples exemplo de Introspection).
+		
+		* Comportamento semelhante a de uma interface com diversas implementações de um mesmo método,
+		* porém, usando Instropective não é necessário o "contrato" entre as classes aumentando a
+		* liberdade do programador.
+		*/
+		else return;
+		
+		
+		// Alterando diretamente o atributo usando Reflection:
+		/*
+		 * Map<String, Integer> sortedMap = new LinkedHashMap<>();
+		 * 
+		 * try { Field obj_terms = obj.getClass().getDeclaredField("terms"); //
+		 * capturando campo do objeto obj_terms.setAccessible(true); // tornando-o
+		 * acessivel
+		 * 
+		 * @SuppressWarnings("unchecked") // copia do conteudo de "terms" com cast
+		 * Map<String, Integer> obj_unsortedMap = (Map<String, Integer>)
+		 * obj_terms.get(obj);
+		 * 
+		 * // ordenando (decrescente)
+		 * obj_unsortedMap.entrySet().stream().sorted(Map.Entry.comparingByValue(
+		 * Comparator.reverseOrder())) .forEachOrdered(entry ->
+		 * sortedMap.put(entry.getKey(), entry.getValue()));
+		 * 
+		 * obj_terms.set(obj, sortedMap); } catch (Exception e) { e.printStackTrace(); }
+		 */
 	}
 }

@@ -24,13 +24,7 @@ public class TermFrequency {
 		return terms;
 	}
 
-	// Classe que para armazenar uma palavra e sua frequencia
-	public class termStruct {
-		public String word;
-		public int quantity;
-	}
-
-	// Frequencia do "termo" fornecido no texto.
+	// Frequencia do "term" fornecido no texto.
 	public void specificTermFreq(Vector<String> text, String term) {
 		int term_freq = 0;
 
@@ -63,13 +57,6 @@ public class TermFrequency {
 			}
 		}
 	} // end termFreq();
-
-	public static boolean hasTerm(String line, String term) {
-		if (line.contains(term))
-			return true;
-
-		return false;
-	} // end hasTerm();
 
 	public void printTerms() {
 		Iterator<String> it = terms.keySet().iterator();
