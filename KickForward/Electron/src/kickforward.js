@@ -119,8 +119,9 @@ function filter_chars(words, func){
     for(var i = 0; i < split_quebra.length; i++){
         var intermediario = split_quebra[i].split(' ');
         for(var j = 0 ; j < intermediario.length; j++){
-            if(intermediario[j].length > 2)
-                split_total.push(intermediario[j]);
+			var relaced = intermediario[j].trim().replace(/([\u0300-\u036f]|[^0-9a-zA-Z--])/g, '');
+            if(relaced.length > 2)
+                split_total.push(relaced);
         }        
     }
 
