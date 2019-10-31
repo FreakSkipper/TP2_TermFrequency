@@ -1,4 +1,5 @@
 function noOp(){
+    document.getElementById('finish').innerHTML = "Finalizado!";
     return;
 }
 
@@ -137,7 +138,7 @@ function read_file(func){
                 
                 words = reader.result;
                 func(words, normalize);
-                document.getElementById('finish').innerHTML = "Finalizado!";
+                // document.getElementById('finish').innerHTML = "Finalizado!";
             }
         }
         else{
@@ -149,6 +150,7 @@ function read_file(func){
 
 function main(){
     document.getElementById('termFrequency').innerHTML = "";
+    document.getElementById('finish').innerHTML = "Aguardando...";
     read_file(filter_chars);
     // document.getElementById('finish').innerHTML = "Finalizado!";
 }
