@@ -29,7 +29,7 @@ auto lambda_file = [](string path_to_file){
 
  bool isEspecial(char a){
     string especiais = "!?°ºª@#$%¨&*()+=,.;_-:></\\{[]}~^´`|\"' ";
-    if(especiais.find(a) != -1){
+    if(especiais.find(a) != string::npos){
         return true;
     }
     return false;
@@ -180,12 +180,16 @@ void read_file(string path_to_file, void *func){
 
 
 int main(){
-    //void  (*ptr) () = soma;
+    /* Leitura de Path  */
+    string caminho;
+    cout << "\n========== Term Frequency - UnB =============\n";
+    cout << "Diga qual arquivo voce deseja pesquisar:";
+    cin >> caminho;
+    cout << "\n";
+    /* ================== */
 
-    //ptr();
-
-    read_file("dracula.txt", (void *) filter_chars);
-    cout << "Finalizado." << endl;
+    read_file(caminho, (void *) filter_chars);
+    cout << "\nUm Arquivo contendo todo o Resultado foi criado com o nome: result_termFrequency.txt\n\nFinalizado." << endl;
 
     return 0;
 }
