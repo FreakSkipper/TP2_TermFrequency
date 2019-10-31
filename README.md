@@ -2,7 +2,7 @@
 
 ## Integrantes:
   - Eduardo F. Assis;
-  - Alexandre Souza.
+  - Alexandre Souza Costa Oliveira.
 
 ## Conteúdo:
   * _Introspective_: Implementação TF em Java usando Reflection API.
