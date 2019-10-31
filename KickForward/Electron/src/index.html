@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <title>UnB - Kick Forward</title>
+    <script src="./kickforward.js"></script>
+  </head>
+  <body>
+    <div class="titulo">
+      <h1>Term Frequency</h1>
+    </div>
+    <div class="Arquivos">
+      <div class="textoFile">
+        <p>Escolha o arquivo TXT que deseja verificar:</p>
+        <label for="arquivo"><p>Escolher</p></label>
+        <input id="arquivo" type="file" onchange="alterou('arquivo_selected', this)">
+        <p id="arquivo_selected">Arquivo Selecionado:</p>
+      </div>
+      <div class="stopFile">
+        <p>Escolha o arquivo TXT contendo StopWords:</p>
+        <label for="stopWords"><p>Escolher</p></label>
+        <input id="stopWords" type="file" onchange="alterou('stopWords_selected', this)">
+        <p id="stopWords_selected">StopWords Selecionado:</p>
+      </div>
+    </div>
+    <div class="botao">
+      <p onclick="main()">Iniciar</p>
+    </div>
+    <div class="saida">
+      <div id="termFrequency" class="termFrequency"></div>
+      <p id="finish" class="finish"> Aguardando... </p>
+    </div>
+    <!-- You can also require other files to run in this process -->
+    <script src="./renderer.js"></script>
+  </body>
+</html>
