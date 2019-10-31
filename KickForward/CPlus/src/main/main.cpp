@@ -27,6 +27,14 @@ auto lambda_file = [](string path_to_file){
     return words;
  };
 
+ bool isEspecial(char a){
+    string especiais = "!?°ºª@#$%¨&*()+=,.;_-:></\\{[]}~^´`|\"' ";
+    if(especiais.find(a) != -1){
+        return true;
+    }
+    return false;
+}
+
 bool compareSort (const pair<string,int> a, const pair<string,int> b){
   return (a.second > b.second );
 }
@@ -42,10 +50,28 @@ void print_text(vector<pair<string,int>> words, void *func){
     reinterpret_cast<void(*)()>(func)();
 }
 
+void write_file(vector<pair<string,int>> words, void *func){
+    ofstream file;
+    file.open("result_termFrequency.txt", ios::out);
+
+    if(file.is_open()){
+        for(pair<string, int> i : words){
+            file << i.first << "\t\t=========" << i.second << "\n";
+        }
+
+        file.close();
+    }
+    else{
+        cout << "Error in Create File Result..";
+    }
+
+    reinterpret_cast<void(*)(vector<pair<string,int>>, void *)>(func)(words, (void *) noOp);
+}
+
 void sorte(vector<pair<string,int>> words, void * func){
     sort(words.begin(), words.end(), compareSort);
 
-    reinterpret_cast<void(*)(vector<pair<string,int>>, void *)>(func)(words, (void *) noOp);
+    reinterpret_cast<void(*)(vector<pair<string,int>>, void *)>(func)(words, (void *) print_text);
 }
 
 void frequencies(vector<string> words, void * func){
@@ -73,7 +99,7 @@ void frequencies(vector<string> words, void * func){
         }
     }
     cout << '\n';
-    reinterpret_cast<void(*)(vector<pair<string,int>>, void *)>(func)(contagem, (void *) print_text);
+    reinterpret_cast<void(*)(vector<pair<string,int>>, void *)>(func)(contagem, (void *) write_file);
 }
 
 void remover_stopwords(vector<string> words, void * func){
@@ -110,6 +136,19 @@ void normalize(vector<string> words, void * func){
 
 void filter_chars(vector<string> words, void *func){
     vector<string> strip_words;
+
+    cout << "Filtrando";
+    for(unsigned i = 0; i < words.size(); i++){
+        if( i % 1000 == 0)
+            cout << ".";
+        for(unsigned j = 0; j < words[i].size(); j++){
+            if(isEspecial(words[i][j])){
+                words[i][j] = ' ';
+            }
+        }
+    }
+    cout << "\n";
+
     for(string i : words){
         int ultima = 0;
         for(unsigned j = 0; j < i.size(); j ++){
@@ -122,6 +161,7 @@ void filter_chars(vector<string> words, void *func){
             }
             else if(j == i.size() - 1){
                 string sub = i.substr(ultima, j - ultima + 1);
+
                 if(sub.size() > 2)
                     strip_words.push_back(sub);
             }

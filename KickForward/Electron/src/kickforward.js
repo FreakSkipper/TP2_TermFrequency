@@ -110,7 +110,8 @@ function normalize(words, func){
 }
 
 function filter_chars(words, func){
-    var split_quebra = words.split('\n');
+	var word_relaced = words.replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, ' ');
+    var split_quebra = word_relaced.split('\n');
     var split_total = [];
 
     var term = document.getElementById("termFrequency");
@@ -119,7 +120,7 @@ function filter_chars(words, func){
     for(var i = 0; i < split_quebra.length; i++){
         var intermediario = split_quebra[i].split(' ');
         for(var j = 0 ; j < intermediario.length; j++){
-			var relaced = intermediario[j].trim().replace(/([\u0300-\u036f]|[^0-9a-zA-Z--])/g, '');
+			var relaced = intermediario[j].trim();
             if(relaced.length > 2)
                 split_total.push(relaced);
         }        

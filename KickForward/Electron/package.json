@@ -1,25 +1,27 @@
 {
-  "name": "electron-quick-start",
+  "name": "UnB_KickForward",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "A small implementation of KickForward for Term Frequency",
   "main": "./electron/main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/FreakSkipper/TP2_TermFrequency",
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
+    "term",
+    "frequency",
+    "initial",
     "demo"
   ],
-  "author": "GitHub",
+  "author": "Alexandre Souza and Eduardo F. Assis",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^7.0.0"
+    "electron": "^7.0.0",
+    "electron-winstaller": "^4.0.0"
   },
   "dependencies": {
-    "electron-packager": "^14.1.0"
+    "electron-packager": "^14.1.0",
+    "electron-squirrel-startup": "^1.0.0"
   }
 }
