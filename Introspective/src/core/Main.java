@@ -1,18 +1,13 @@
 package core;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.Spliterator;
 import java.util.Vector;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
+/*import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;*/
 
 public class Main {
 	private static Scanner user_input; // destinado ao input do usuario (https://stackoverflow.com/q/13042008)
@@ -27,9 +22,12 @@ public class Main {
 			System.out.println("> 2 - Sair");
 			System.out.print(">> ");
 
-			String readString = user_input.nextLine();
-			if (!readString.isEmpty())
+			try {
+				String readString = user_input.nextLine();
 				opt = Integer.parseInt(readString);
+			} catch (NumberFormatException | NoSuchElementException e) {
+				System.out.println("> Valor inserido incorreto! Tente novamente.");
+			}
 		} while (opt != 1 && opt != 2);
 
 		return opt;
@@ -54,8 +52,11 @@ public class Main {
 				System.out.println(">> ");
 				nomeArquivoStopWords = user_input.nextLine();
 				Vector<String> stopwords = Utilidades.readDocument(nomeArquivoStopWords);
+
 				if (text.isEmpty() || stopwords.isEmpty())
 					continue;
+				else
+					System.out.println("> Aguarde.");
 
 				// removendo stopwords
 				Utilidades.rmStopWords(text, stopwords);
@@ -67,21 +68,20 @@ public class Main {
 				Utilidades.sortMap(tf); // ordenando usando Introspective
 
 				try {
+					// Acessando elementos usando Introspection (Reflection API)
 					Field f_terms = tf.getClass().getDeclaredField("terms"); // acessando atributo "terms"
 					f_terms.setAccessible(true); // tornando atributo privado acessivel (perigoso)
 
-					// printando termos e frequencia correspondente
+					// Printando termos e frequencia correspondente
 					@SuppressWarnings("unchecked")
-					Map<String, Integer> ptr_terms = (Map<String, Integer>) f_terms.get(tf); // ponteiro para objeto da
-																								// classe
-																								// "TermFrequency"
+					// ponteiro (copia) para o objeto da classe "TermFrequency"
+					Map<String, Integer> ptr_terms = (Map<String, Integer>) f_terms.get(tf);
 					Iterator<String> it = ptr_terms.keySet().iterator();
 					int contador = 0;
 					while (it.hasNext()) {
 						contador++;
 						String key = it.next();
 						System.out.printf("> Palavra: %-20s | Frequencia: %-8s\n", "*" + key + "*", ptr_terms.get(key));
-//						System.out.println(f_terms.get(tf));
 					}
 					System.out.println("> A quantidade de palavras eh: " + contador);
 				} catch (Exception e) {
@@ -89,8 +89,6 @@ public class Main {
 					return;
 				}
 
-				// printando normalmente
-				// tf.printTerms();
 			} // end opt == 1;
 			else if (opt == 2)
 				stop = true;
