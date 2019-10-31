@@ -157,3 +157,21 @@ input[type="file"] {
     position: absolute;
     right: 0%;
 }
+
+.circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+    box-sizing: border-box;
+    border: solid 10px rgba(255, 255, 255, 0.2);
+    border-top-color: #FFF;
+    animation: spin 1s infinite linear;
+    margin: auto;
+    margin-top: 10vh;
+  }
+
+  @keyframes spin { 
+    100% { 
+      transform: rotate(360deg); 
+    } 
+  } 

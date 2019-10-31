@@ -114,7 +114,7 @@ function filter_chars(words, func){
     var split_total = [];
 
     var term = document.getElementById("termFrequency");
-    term.innerHTML = "Calculando";
+    term.innerHTML = "<div class=\"circle\"></div>";
 
     for(var i = 0; i < split_quebra.length; i++){
         var intermediario = split_quebra[i].split(' ');
