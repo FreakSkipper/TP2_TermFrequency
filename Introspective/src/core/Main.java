@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Vector;
+import java.io.IOException;
 import java.lang.reflect.Field;
 /*import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;*/
@@ -33,6 +34,31 @@ public class Main {
 		return opt;
 	} // end menu();
 
+	private static boolean loading = true;
+
+	private static synchronized void loading(String msg) {
+		System.out.println(msg);
+
+		Thread th = new Thread() {
+			@Override
+			public void run() {
+				try {
+					System.out.write("\r|".getBytes());
+					while (loading) {
+						System.out.write("-".getBytes());
+						Thread.sleep(500);
+					}
+					System.out.write("| Done \r\n".getBytes());
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		th.start();
+	} // end loading();
+
 	public static void main(String[] args) {
 		String nomeArquivoFonte, nomeArquivoStopWords;
 		boolean stop = false;
@@ -56,7 +82,7 @@ public class Main {
 				if (text.isEmpty() || stopwords.isEmpty())
 					continue;
 				else
-					System.out.println("> Aguarde.");
+					loading("");
 
 				// removendo stopwords
 				Utilidades.rmStopWords(text, stopwords);
