@@ -85,15 +85,25 @@ public class Utilidades {
 		return true;
 	} // end writeResultFile();
 
-	public static void rmStopWords(Vector<String> text, Vector<String> stopwords) {
-		String[] array_text = text.toArray(new String[text.size()]); // operacao usando o vetor nao funcionava para
+	@SuppressWarnings("unchecked")
+	public static void rmStopWords(Object obj_text, Object obj_stopwords) {
+		if (!(obj_text instanceof Vector<?> && obj_stopwords instanceof Vector<?>)) return;
+		Vector<?> ptr_text = (Vector<?>) obj_text;
+		Vector<?> ptr_stopwords = (Vector<?>) obj_stopwords;
+		
+		if (ptr_text.firstElement().getClass() != String.class 
+				|| ptr_stopwords.firstElement().getClass() != String.class) return;
+		ptr_text = (Vector<String>) ptr_text;
+		ptr_stopwords = (Vector<String>) ptr_stopwords;
+		
+		String[] array_text = ptr_text.toArray(new String[ptr_text.size()]); // operacao usando o vetor nao funcionava para
 																		// casos muito grandes.
 		for (int i = 0; i < array_text.length; i++) {
 			String line = array_text[i];
-			for (int j = 0; j < stopwords.size(); j++) {
-				line = line.replaceAll("\\b" + stopwords.elementAt(j) + "\\b\\s*", "");
+			for (int j = 0; j < ptr_stopwords.size(); j++) {
+				line = line.replaceAll("\\b" + ptr_stopwords.elementAt(j) + "\\b\\s*", "");
 				line = line.replaceAll("\\b" + "[a-zA-Z]?" + "\\b", "");
-				text.set(i, line);
+				((Vector<String>) ptr_text).set(i, line);
 			}
 		}
 	} // end rmStopWords();
