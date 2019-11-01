@@ -10,7 +10,7 @@ Utilização:
 		* No terminal, digite:
 			- npm install
 			- npm start
-	- Segunda alternativa:
+	- Segunda alternativa para windows:
 		* Download do setup.exe direto pelo drive https://drive.google.com/file/d/133QKvoJdrMmOp6UJ4AvZWL5Z66dn-v0W/view
 
 Código:
