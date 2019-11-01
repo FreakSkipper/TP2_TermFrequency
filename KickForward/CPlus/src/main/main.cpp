@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <vector>
 #include <algorithm>
@@ -14,7 +15,7 @@ auto lambda_file = [](string path_to_file){
     file.open(path_to_file, fstream::in);
 
     if(!file.is_open()){
-        cout << "Falha ao ler o arquivo...\n";
+        cout << "Falha ao ler o arquivo..." << endl;
         return words;
     }
 
@@ -45,7 +46,7 @@ void noOp(){
 
 void print_text(vector<pair<string,int>> words, void *func){
     for(pair<string, int> i : words)
-        cout << i.first << "\t\t========= " << i.second << endl;
+        cout << left << setw(20) << i.first << "========= " << right << setw(5) << i.second << endl;
 
     reinterpret_cast<void(*)()>(func)();
 }
@@ -56,13 +57,13 @@ void write_file(vector<pair<string,int>> words, void *func){
 
     if(file.is_open()){
         for(pair<string, int> i : words){
-            file << i.first << "\t\t=========" << i.second << "\n";
+            file << left << setw(20) << i.first << "=========" << right << setw(5) << i.second << '\n';
         }
-
+        file.flush();
         file.close();
     }
     else{
-        cout << "Error in Create File Result..";
+        cout << "Error in Create File Result.." << endl;
     }
 
     reinterpret_cast<void(*)(vector<pair<string,int>>, void *)>(func)(words, (void *) noOp);
@@ -183,7 +184,7 @@ int main(){
     /* Leitura de Path  */
     string caminho;
     cout << "\n========== Term Frequency - UnB =============\n";
-    cout << "Diga qual arquivo voce deseja pesquisar:";
+    cout << "Diga qual arquivo voce deseja pesquisar: ";
     cin >> caminho;
     cout << "\n";
     /* ================== */
