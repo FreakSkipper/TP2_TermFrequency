@@ -1,11 +1,12 @@
 package core;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Vector;
-import java.lang.reflect.Field;
 /*import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;*/
 
@@ -78,11 +79,20 @@ public class Main {
 					Map<String, Integer> ptr_terms = (Map<String, Integer>) f_terms.get(tf);
 					Iterator<String> it = ptr_terms.keySet().iterator();
 					int contador = 0;
+					LinkedList<String> outputBuffer = new LinkedList<>();
+
 					while (it.hasNext()) {
 						contador++;
 						String key = it.next();
-						System.out.printf("> Palavra: %-20s | Frequencia: %-8s\n", "*" + key + "*", ptr_terms.get(key));
+
+						String outputString = String.format("> Palavra: %-20s | Frequencia: %-8s\n", "*" + key + "*",
+								ptr_terms.get(key));
+						outputBuffer.add(outputString);
+						System.out.printf(outputString);
 					}
+					String outputString = String.format("> A quantidade de palavras eh: %d\n", contador);
+					outputBuffer.add(outputString);
+					Utilidades.writeResultFile(outputBuffer);
 					System.out.println("> A quantidade de palavras eh: " + contador);
 				} catch (Exception e) {
 					e.printStackTrace();

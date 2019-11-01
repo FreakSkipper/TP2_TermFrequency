@@ -1,13 +1,17 @@
 package core;
 
-/*import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.Map;*/
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Vector;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 //import java.lang.reflect.*;
 
 public class Utilidades {
@@ -15,7 +19,12 @@ public class Utilidades {
 		System.out.println(new String(new char[50]).replace("\0", "\r\n"));
 	}
 
-	public static Vector<String> readDocument(String nomeArquivo) {
+	public static Vector<String> readDocument(Object obj) {
+		if (!(obj instanceof String))
+			return null;
+
+		String ptr_nomeArquivo = (String) obj;
+
 		// conferindo chamada de funcao através da pilha de execução
 		String className = new Exception().getStackTrace()[1].getMethodName();
 		String expectedCaller = "main";
@@ -26,7 +35,7 @@ public class Utilidades {
 		}
 
 		// abrindo arquivo
-		File file = new File(System.getProperty("user.dir") + "/" +nomeArquivo);
+		File file = new File(System.getProperty("user.dir") + "/" + ptr_nomeArquivo);
 		String str;
 		Vector<String> string_vector = new Vector<String>();
 
@@ -42,12 +51,39 @@ public class Utilidades {
 
 		} catch (IOException e) {
 			// e.printStackTrace();
-			System.out.println("> Nao foi possivel ler o arquivo: " + "\"" +nomeArquivo + "\""
-					+ " no caminho: " + "\"" +System.getProperty("user.dir") + "\"");
+			System.out.println("> Nao foi possivel ler o arquivo: " + "\"" + ptr_nomeArquivo + "\"" + " no caminho: "
+					+ "\"" + System.getProperty("user.dir") + "\"");
 		}
 
 		return string_vector;
 	} // end readDocument();
+
+	/*
+	 * Recebe um objeto String[] e escreve no arquivo "result.txt"
+	 */
+	public static boolean writeResultFile(Object obj) {
+		if (!(obj instanceof LinkedList))
+			return false;
+
+		@SuppressWarnings("unchecked")
+		LinkedList<String> ptr_obj = (LinkedList<String>) obj;
+		Iterator<String> it_obj = ptr_obj.iterator();
+
+		Charset charset = Charset.forName("UTF-8");
+		Path pathToFile = Paths.get("./result.txt");
+
+		try (BufferedWriter writer = Files.newBufferedWriter(pathToFile, charset)) {
+			while (it_obj.hasNext()) {
+				String line = it_obj.next();
+				writer.write(line, 0, line.length());
+			}
+		} catch (IOException x) {
+			System.err.format("IOException: %s%n", x);
+			return false;
+		}
+
+		return true;
+	} // end writeResultFile();
 
 	public static void rmStopWords(Vector<String> text, Vector<String> stopwords) {
 		String[] array_text = text.toArray(new String[text.size()]); // operacao usando o vetor nao funcionava para
@@ -64,22 +100,23 @@ public class Utilidades {
 
 	// ordenar "terms" usando Introspection
 	public static void sortMap(Object obj) {
-		if (obj instanceof TermFrequency) {		// conferindo classe do objeto
+		if (obj instanceof TermFrequency) { // conferindo classe do objeto
 			TermFrequency ptr_obj = (TermFrequency) obj;
 			ptr_obj.sortMap();
 		}
-		
+
 		/*
-		Poderia ter um comportamento para cada tipo de objeto, permitindo a alteração
-		do fluxo do programa de acordo com o tipo do objeto (simples exemplo de Introspection).
-		
-		* Comportamento semelhante a de uma interface com diversas implementações de um mesmo método,
-		* porém, usando Instropective não é necessário o "contrato" entre as classes aumentando a
-		* liberdade do programador.
-		*/
-		else return;
-		
-		
+		 * Poderia ter um comportamento para cada tipo de objeto, permitindo a alteração
+		 * do fluxo do programa de acordo com o tipo do objeto (simples exemplo de
+		 * Introspection).
+		 * 
+		 * Comportamento semelhante a de uma interface com diversas implementações de um
+		 * mesmo método, porém, usando Instropective não é necessário o "contrato" entre
+		 * as classes aumentando a liberdade do programador.
+		 */
+		else
+			return;
+
 		// Alterando diretamente o atributo usando Reflection:
 		/*
 		 * Map<String, Integer> sortedMap = new LinkedHashMap<>();
