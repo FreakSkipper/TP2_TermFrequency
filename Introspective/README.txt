@@ -3,6 +3,11 @@ Integrantes:
 	- Alexandre Souza Costa Oliveira - 17/0098168.
 
 
+Executar:
+	A pasta "bin" contém o .jar que deve ser executado pelo terminal. Junto
+	dele se encontra os arquivos de texto que serão acessados.
+
+
 Observações:
 	* Na classe "Utilidades", método "readDocument" confere quem a chamou,
 	autorizando sua execução somente para o método "main".

@@ -60,13 +60,13 @@ public class Main {
 					System.out.println("> Aguarde.");
 
 				// removendo stopwords
-				Utilidades.rmStopWords(text, stopwords);
+				Utilidades.rmStopWordsChecker(text, stopwords);
 
 				// calculando frequencia de termos
 				TermFrequency tf = new TermFrequency();
 				tf.termFreq(text);
 				// tf.sortMap(); // ordenando normalmente
-				Utilidades.sortMap(tf); // ordenando usando Introspective
+				Utilidades.sortMapChecker(tf); // ordenando usando Introspective
 
 				try {
 					// Acessando elementos usando Introspection (Reflection API)

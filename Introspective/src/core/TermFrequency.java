@@ -24,7 +24,7 @@ public class TermFrequency {
 		return terms;
 	}
 
-	// Frequencia do "term" fornecido no texto.
+	// Frequencia do termo fornecido pelo usuario.
 	public void specificTermFreq(Vector<String> text, String term) {
 		int term_freq = 0;
 
@@ -67,7 +67,21 @@ public class TermFrequency {
 			System.out.printf("> Palavra: %-20s | Frequencia: %-8s\n", key, terms.get(key));
 		}
 		System.out.println("> Quantidade de palavras: " + contador);
-	} // printTerms();
+	} // end printTerms();
+
+	public static void rmStopWords(Vector<String> text, Vector<String> stopwords) {
+		String[] array_text = text.toArray(new String[text.size()]); // operacao usando o vetor nao funcionava
+																				// para
+		// casos muito grandes.
+		for (int i = 0; i < array_text.length; i++) {
+			String line = array_text[i];
+			for (int j = 0; j < stopwords.size(); j++) {
+				line = line.replaceAll("\\b" + stopwords.elementAt(j) + "\\b\\s*", "");
+				line = line.replaceAll("\\b" + "[a-zA-Z]?" + "\\b", "");
+				text.set(i, line);
+			}
+		}
+	} // end rmStopWords();
 
 	// ordenar Map por valor
 	public void sortMap() {
@@ -77,6 +91,6 @@ public class TermFrequency {
 				.forEachOrdered(entry -> sortedMap.put(entry.getKey(), entry.getValue()));
 
 		this.terms = sortedMap;
-	}
+	} // end sortMap();
 
 }

@@ -1,5 +1,6 @@
 package core;
 
+import core.TermFrequency;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Vector;
@@ -86,30 +87,23 @@ public class Utilidades {
 	} // end writeResultFile();
 
 	@SuppressWarnings("unchecked")
-	public static void rmStopWords(Object obj_text, Object obj_stopwords) {
+	public static void rmStopWordsChecker(Object obj_text, Object obj_stopwords) {
 		if (!(obj_text instanceof Vector<?> && obj_stopwords instanceof Vector<?>)) return;
+		// cast Vector
 		Vector<?> ptr_text = (Vector<?>) obj_text;
 		Vector<?> ptr_stopwords = (Vector<?>) obj_stopwords;
 		
 		if (ptr_text.firstElement().getClass() != String.class 
 				|| ptr_stopwords.firstElement().getClass() != String.class) return;
-		ptr_text = (Vector<String>) ptr_text;
-		ptr_stopwords = (Vector<String>) ptr_stopwords;
+		// cast Vector<String>
+		//ptr_text = (Vector<String>) ptr_text;
+		//ptr_stopwords = (Vector<String>) ptr_stopwords;
 		
-		String[] array_text = ptr_text.toArray(new String[ptr_text.size()]); // operacao usando o vetor nao funcionava para
-																		// casos muito grandes.
-		for (int i = 0; i < array_text.length; i++) {
-			String line = array_text[i];
-			for (int j = 0; j < ptr_stopwords.size(); j++) {
-				line = line.replaceAll("\\b" + ptr_stopwords.elementAt(j) + "\\b\\s*", "");
-				line = line.replaceAll("\\b" + "[a-zA-Z]?" + "\\b", "");
-				((Vector<String>) ptr_text).set(i, line);
-			}
-		}
+		TermFrequency.rmStopWords((Vector<String>) ptr_text, (Vector<String>) ptr_stopwords);
 	} // end rmStopWords();
 
 	// ordenar "terms" usando Introspection
-	public static void sortMap(Object obj) {
+	public static void sortMapChecker(Object obj) {
 		if (obj instanceof TermFrequency) { // conferindo classe do objeto
 			TermFrequency ptr_obj = (TermFrequency) obj;
 			ptr_obj.sortMap();
