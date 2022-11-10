@@ -17,7 +17,7 @@
   "author": "Alexandre Souza and Eduardo F. Assis",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^9.4.0",
+    "electron": "^18.3.7",
     "electron-winstaller": "^4.0.0"
   },
   "dependencies": {
